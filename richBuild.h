@@ -1,7 +1,6 @@
 #ifndef RICHBUILD_H
 #define RICHBUILD_H
 
-#include <dirent.h> 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -20,7 +19,15 @@ void compile_files(char* compiler, const char* files, const char* cflags, char* 
 
 // Macro Definitions
 
-#define READ_FILES() get_files()
+#ifdef _WIN32
+  #include <Windows.h>
+  #define READ_FILES() get_files_windows()
+#endif
+
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+  #include <dirent.h>
+  #define READ_FILES() get_files()
+#endif
 
 #define CLEANUP() clean_up()
 
@@ -59,6 +66,47 @@ char* get_files() {
   }
   return file_list;
 }
+
+#ifdef _WIN32
+
+char* get_files_windows() {
+  const int MAX_PATH = 256;
+  WIN32_FIND_DATA find_file_data;
+  HANDLE hFind;
+  file_list = (char*)malloc(sizeof(char) * filename_size_limit * number_of_files_to_build);
+  
+  TCHAR buffer[MAX_PATH];
+  DWORD dwRet;
+
+  dwRet = GetCurrentDirectory(MAX_PATH, buffer);
+  if (dwRet == 0) {
+    printf("Error getting current directory \n");
+    return 1;
+  }
+
+  hFind = FindFirstFile(buffer, &find_file_data);
+  
+  if (hFind == INVALID_HANDLE_VALUE) {
+    printf("Error finding files\n");
+    return 1;
+  }
+  strcpy(file_list, "");
+
+  do {
+    if (!(findFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+      if (str_ends_with(find_file_data.cFileName, ".c") && !str_starts_with(find_file_data.cFileName, "richBuild")) {
+        strcat(file_list, find_file_data.cFileName);
+        strcat(file_list, " ");
+        printf("File: %s\n", find_file_data.cFileName);
+      }
+    }
+  } while (FindNextFile(hFind, &findFileData) != 0);
+
+  FindClose(hFind);
+  return file_list;
+}
+
+#endif
 
 int str_ends_with(const char* string, const char* suffix) {
   if (!string || !suffix) {
