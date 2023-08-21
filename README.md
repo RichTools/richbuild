@@ -67,7 +67,7 @@ void BUILD_PROJECT() {
 COMPILE("gcc", files, cflags, executable_name, RAYLIB);
 ```
 *__NOTE:__*
-There is currently no way to add builtin packages along with others so you will have to compose those yourself via the package arguement <3
+There is currently no way to add builtin packages along with others so you will have to compose those yourself via the package argument <3
 
 
 ## How it works.
@@ -77,3 +77,5 @@ Example and explaination of STB style libraries [here](https://github.com/nothin
 First we use the `READ_FILES` macro to read the .c files in the file system (current directory). This will ignore any files with the name `richBuild.c` so make sure that is the name of your config file for RichBuild. The names of all the C files will be appended onto the compile command for you. 
 
 Next calling the compile macro we pass the **name of the compiler** we want to use, the list of files, name of your executable, the final argument are any packages you would like to add such as math via the "-lm" flag. 
+
+Finally we call the `CLEANUP` macro because yes `richBuild` allocates memory to store the name of your files, so we need to free it after.
