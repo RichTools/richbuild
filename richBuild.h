@@ -47,6 +47,8 @@ const size_t number_of_files_to_build = 40;
 const size_t filename_size_limit = 256;
 char* file_list;
 
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+
 char* get_files() {
   DIR *directory;
   struct dirent *dir;
@@ -66,6 +68,8 @@ char* get_files() {
   }
   return file_list;
 }
+
+#endif
 
 #ifdef _WIN32
 
