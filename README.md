@@ -69,6 +69,8 @@ COMPILE("gcc", files, cflags, executable_name, RAYLIB);
 *__NOTE:__*
 There is currently no way to add builtin packages along with others so you will have to compose those yourself via the package argument <3
 
+## Excluding Files
+At the moment I haven't come up with a good way to exclude files from the compilation process. However since only files in the main directory are tracked, you can place exluded files in a folder for now. 
 
 ## How it works.
 The Library is an STB style single header library so you are required to define the implementation.
