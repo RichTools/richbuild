@@ -82,8 +82,5 @@ Next calling the compile macro we pass the **name of the compiler** we want to u
 
 Finally we call the `CLEANUP` macro because yes `richBuild` allocates memory to store the name of your files, so we need to free it after.
 
-## A Word about Windows 
-I have made an attempt to interface with the windows API to list files, since the `dirend` header is unix specific.
-I don't actually have any way to test it on windows, so I do not konw if that solution works. As a matter of fact just use WSL, that has a c compiler built in and also supports the `dirend` header.
-
-If anyone reading this using windows would like to try it, I would appreciate if you let me know if it works. 
+## A Word about Windows
+I tested, using wine and wingw-w64 and it broke completely, so I have now removed the code for interfacing the windows API, I don't want to fix it. Use a C compiler from WSL to run.
