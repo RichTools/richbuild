@@ -2,4 +2,4 @@
 
 set -xe
 
-gcc -o richBuild richBuild.c 
+gcc -o richBuild richBuild.c
