@@ -14,13 +14,28 @@
 
 // Declarations
 
+// Find if a string ends with a specfied suffix 
+// Returns 1 if true and 0 if false
 int str_ends_with(const char* string, const char* suffix);
+
+// Find if a string starts with a specifed prefic
+// Returns 1 if true and 0 if fase 
 int str_starts_with(const char* string, const char* prefix); 
+
+// Remove a substring (sub) from a string (str)
 void str_remove(char** str, char* sub);
+
+// count the number of spaces in a string 
 int count_files(const char* string);
 
+// return a string containing all the C files in the current 
+// directory excluding the build script itself
 char* get_files();
+
+// remove files from the build
 void exclude_files(char** files, int size, ...);
+
+// add everything to the compile command and run it
 void compile_files(char* compiler, const char* files, const char* cflags, char* executable_name, char* packages);
 
 // Macro Definitions
@@ -43,14 +58,18 @@ void compile_files(char* compiler, const char* files, const char* cflags, char* 
 
 #ifdef RICHBUILD_IMPLEMENTATION
 
-const size_t number_of_files_to_build = 40;
-const size_t filename_size_limit = 256;
+// top level constants
+const size_t NUMBER_OF_FILES_TO_BUILD = 40;
+const size_t FILENAME_SIZE_LIMIT = 256;
+
 char* file_list;
 
 char* get_files() {
   DIR *directory;
   struct dirent *dir;
-  file_list = (char*)malloc(sizeof(char) * filename_size_limit * number_of_files_to_build);
+
+  // allocate memory for the file names
+  file_list = (char*)malloc(sizeof(char) * FILENAME_SIZE_LIMIT * NUMBER_OF_FILES_TO_BUILD);
 
   directory = opendir(".");
   if (directory) {
