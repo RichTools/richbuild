@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <dirent.h>
+#include <stdarg.h>
 
 // Common Packages
 
@@ -15,7 +16,11 @@
 
 int str_ends_with(const char* string, const char* suffix);
 int str_starts_with(const char* string, const char* prefix); 
+void str_remove(char** str, char* sub);
+int count_files(const char* string);
+
 char* get_files();
+void exclude_files(char** files, int size, ...);
 void compile_files(char* compiler, const char* files, const char* cflags, char* executable_name, char* packages);
 
 // Macro Definitions
@@ -25,6 +30,9 @@ void compile_files(char* compiler, const char* files, const char* cflags, char* 
 
 #define COMPILE(compiler, files, cflags, executable_name, packages) \
   compile_files(compiler, files, cflags, executable_name, packages)
+
+#define EXCLUDE(files, ...) \
+  exclude_files(files, count_files(*files), __VA_ARGS__)
 
 #define INFO(msg) printf("[INFO] %s\n", msg)
 #define CMD(cmd) printf("[CMD] %s\n", cmd)
@@ -59,6 +67,32 @@ char* get_files() {
   return file_list;
 }
 
+int count_files(const char* string) {
+  int count = 0;
+  const char* s;
+
+  for (s = string; *s != '\0'; s++) {
+    if (*s == ' ') {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+void str_remove(char** str, char* sub) {
+  size_t len = strlen(sub);
+  
+  if (len > 0) {
+    char* p = *str;
+    while ((p = strstr(p, sub)) != NULL) {
+      memmove(p, p + len, strlen(p + len) + 1);
+    }
+    str = &p;
+  }
+}
+
+
 int str_ends_with(const char* string, const char* suffix) {
   if (!string || !suffix) {
     return 0;
@@ -86,6 +120,18 @@ int str_starts_with(const char* string, const char* prefix) {
   }
 
   return strncmp(string, prefix, prefix_length) == 0;
+}
+
+void exclude_files(char** files, int size, ...) {
+  va_list list_ptr;
+  va_start(list_ptr, size);
+
+  for (int i = 0; i < size - 1; i++) {
+    char* word = va_arg(list_ptr, char *);
+    str_remove(files, word);
+  }
+
+  va_end(list_ptr);
 }
 
 void compile_files(char* compiler, const char* files, const char* cflags, char* executable_name, char* packages) {
