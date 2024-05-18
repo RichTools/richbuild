@@ -70,8 +70,27 @@ COMPILE("gcc", files, cflags, executable_name, RAYLIB);
 There is currently no way to add builtin packages along with others so you will have to compose those yourself via the package argument <3
 
 ## Excluding Files
-At the moment I haven't come up with a good way to exclude files from the compilation process. However since only files in the main directory are tracked, you can place exluded files in a folder for now. 
+Excluding files is as simple as using the `EXCLUDE` macro.
 
+```c
+#define RICHBUILD_IMPLEMENTATION
+#include "richBuild.h"
+
+#define cflags "-Wall"
+#define executable_name "main"
+
+void BUILD_PROJECT() {
+  const char* files = READ_FILES();
+  EXCLUDE(&files, "file.c", "anotherfile.c");
+  COMPILE("gcc", files, cflags, executable_name, NULL);
+  CLEANUP();
+}
+
+int main() {
+  BUILD_PROJECT();
+  return 0;
+}
+```
 ## How it works.
 The Library is an STB style single header library so you are required to define the implementation.
 Example and explaination of STB style libraries [here](https://github.com/nothings/stb#how-do-i-use-these-libraries). The library is comprised of a set of macro definitions which call to other functions.
