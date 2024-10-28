@@ -103,3 +103,6 @@ Finally we call the `CLEANUP` macro because yes `richBuild` allocates memory to 
 
 ## A Word about Windows
 I tested, using wine and wingw-w64 and it broke completely, so I have now removed the code for interfacing the windows API, I don't want to fix it. Use a C compiler from WSL to run.
+
+## References
+The main inspiration here was Tsoding more specifically (https://github.com/tsoding/nob.h) as much as RichBuild isn't anything like Nob, Nob was where the inspiration came from. Tsodings streams have always been and always will be my biggest source of motivation and inspiration.
