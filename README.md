@@ -1,6 +1,9 @@
 # RICHBUILD
 A Header only library to make compiling C projects at least a tiny bit easier. Is this one of those projects where in hindsight it probably would have been quicker to just compile things yourself? Probably.
 
+### Todo
+- [ ] Incremental Compilation: comparing modification date
+
 ## What it offers?
 The primary goal for RichBuild was to remove to need to keep adding files into your compile command.
 Picture this, you start with a `main.c` file so you add that to your build script (I normall use a shell file).
