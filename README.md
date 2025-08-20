@@ -120,7 +120,7 @@ int main() {
   BUILD_PROJECT();
   return 0;
 }
-`
+```
 
 ## How it works.
 The Library is an STB style single header library so you are required to define the implementation.
