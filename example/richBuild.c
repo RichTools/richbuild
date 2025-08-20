@@ -5,9 +5,14 @@
 #define executable_name "main"
 
 void BUILD_PROJECT() {
+  EXCLUDE("virus.c", "anotherVirus.c");
   char* files = READ_FILES();
-  EXCLUDE(&files, "virus.c", "anotherVirus.c");
   COMPILE("gcc", files, cflags, executable_name, NULL);
+
+  Cmd cmd = {0};
+  Cmd_append(&cmd, "./main");
+
+  CMD_RUN(&cmd);
   CLEANUP();
 }
 
