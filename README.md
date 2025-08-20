@@ -80,8 +80,8 @@ Excluding files is as simple as using the `EXCLUDE` macro.
 #define executable_name "main"
 
 void BUILD_PROJECT() {
+  EXCLUDE("file.c", "anotherfile.c");
   const char* files = READ_FILES();
-  EXCLUDE(&files, "file.c", "anotherfile.c");
   COMPILE("gcc", files, cflags, executable_name, NULL);
   CLEANUP();
 }
@@ -91,6 +91,37 @@ int main() {
   return 0;
 }
 ```
+
+## Arbitrary Shell Commands 
+We can run arbitrary shell commands using `Cmd`
+
+```c
+#define RICHBUILD_IMPLEMENTATION
+#include "richBuild.h"
+
+#define cflags "-Wall"
+#define executable_name "main"
+
+void BUILD_PROJECT() {
+  EXCLUDE("file.c", "anotherfile.c");
+  const char* files = READ_FILES();
+  COMPILE("gcc", files, cflags, executable_name, NULL);
+    
+  // initialise, append, run
+  Cmd cmd = {0};
+  Cmd_append(&cmd, "./main");
+
+  CMD_RUN(&cmd);
+ 
+  CLEANUP();
+}
+
+int main() {
+  BUILD_PROJECT();
+  return 0;
+}
+`
+
 ## How it works.
 The Library is an STB style single header library so you are required to define the implementation.
 Example and explaination of STB style libraries [here](https://github.com/nothings/stb#how-do-i-use-these-libraries). The library is comprised of a set of macro definitions which call to other functions.
